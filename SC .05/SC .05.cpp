@@ -34,7 +34,7 @@ int main()
 {
 	Contactnode contactObj;
 	contactObj.getDataFromFileToNode();
-	
+	contactObj.sortAndSavaFile();
 	cout << "\t\t  _____ __  __          _____ _______    _____            _             _   " << endl;
 	cout << "\t\t / ____|  \\/  |   /\\   |  __ \\__   __|  / ____|          | |           | |  " << endl;
 	cout << "\t\t| (___ | \\  / |  /  \\  | |__) | | |    | |     ___  _ __ | |_ __ _  ___| |_ " << endl;
@@ -98,6 +98,8 @@ int main()
 		if (operationNum == 2) {
 			system("cls");
 			string num;
+			cout << "\t \t \t \t Delete Area " << endl;
+			contactObj.printAll();
 			cout << "\t \t \t Delete Contact " << endl;
 			cout << "Enter Phone number For Delete" << endl;
 			cin >> num;
@@ -112,7 +114,7 @@ int main()
 		if (operationNum == 4) {
 			string num;
 			system("cls");
-			cout << "\t \t \t Display Contacts " << endl;
+			cout << "\t \t \t Display Contact " << endl;
 			cout << "Enter Phone number For Display " << endl;
 			cin >> num;
 			contactObj.print(num);
@@ -120,8 +122,8 @@ int main()
 		if (operationNum == 5) {
 			system("cls");
 			cout << "\t \t \t Update Area " << endl;
-			int x = 0;
-			while (x != 7)
+			string x = "0";
+			while (x != "7")
 			{
 				cout << "1 ) Update Frist Name \t \t \t 2 )Update last Name " << endl;
 				cout << "3 ) Update phone \t  \t \t 4 )Update email " << endl;
@@ -130,22 +132,22 @@ int main()
 				cout << "\t \t Enter Value" << endl; 
 				cin >> x;
 
-				if (x == 1) {
+				if (x == "1") {
 					contactObj.updataSingle(1);
 				}
-				if (x == 2) {
+				if (x == "2") {
 					contactObj.updataSingle(2);
 				}
-				if (x == 3) {
+				if (x == "3") {
 					contactObj.updataSingle(3);
 				}
-				if (x == 4) {
+				if (x == "4") {
 					contactObj.updataSingle(4);
 				}
-				if (x == 5) {
+				if (x == "5") {
 					contactObj.updataSingle(5);
 				}
-				if (x == 6) {
+				if (x == "6") {
 					contactObj.updataAll();
 				}
 
@@ -157,9 +159,9 @@ int main()
 		
 			system("cls");
 			cout << "\t \t \t Search Area " << endl;
-			int x = 0;
+			string x = "0";
 			string val;
-			while (x != 5)
+			while (x != "5")
 			{
 				cout << "1 ) Search By phone \t \t \t 2 )Search Frist Name " << endl;
 				cout << "3 ) Search By email \t  \t \t 4 )Search By job " << endl;
@@ -167,22 +169,22 @@ int main()
 				cout << "\t \t Enter Value" << endl;
 				cin >> x;
 
-				if (x == 1) {
+				if (x == "1") {
 					cout << "Enter Phone Number  For Search" << endl;
 					cin >> val;
 					contactObj.search(1,val);
 				}
-				if (x == 2) {
+				if (x == "2") {
 					cout << "Enter Frist name For Search" << endl;
 					cin >> val;
 					contactObj.search(2, val);
 				}
-				if (x == 3) {
+				if (x == "3") {
 					cout << "Enter Email For Search" << endl;
 					cin >> val;
 					contactObj.search(3, val);
 				}
-				if (x == 4) {
+				if (x == "4") {
 					cout << "Enter job For Search" << endl;
 					cin >> val;
 					contactObj.search(4,val);
@@ -320,9 +322,10 @@ void Contactnode::printAll() {
 	cout << "\t Frist Name \t Last name \t Phone \t\t Email \t \t\t Job " << endl;
 	while (ContactTop != NULL)
 	{
-		cout  << " \t " << ContactTop->fristName << "\t\t" << ContactTop->lastName << "\t\t" << ContactTop->phone << "\t" << ContactTop->email << "\t\t" << ContactTop->job << endl;
+		cout  << " \t " << ContactTop->fristName << "\t\t" << ContactTop->lastName << "\t\t" << ContactTop->phone << "\t" << ContactTop->email << "\t\t \t" << ContactTop->job << endl;
 		ContactTop = ContactTop->next;
 	}
+	cout << "\t -----------------------------------------------------------------------------------" << endl;
 	ContactTop = ContactTopBack;
 };
 /*
@@ -460,6 +463,7 @@ bool Contactnode::search(int num,string val) {
 	return check;
 };
 
+
 /*
 	update in list with different ways
 	search (Way number)
@@ -475,10 +479,9 @@ void Contactnode::updataSingle(int query) {
 	cout << "\t Enter Vaild Phone number  " << endl;
 	cin >> num;
 	}
-	while (search(1,num) != true)
+	if (search(1,num) != true)
 	{
-	cout << "\t Enter Vaild Phone number for search " << endl;
-	cin >> num;
+	cout << "\t Cannot found  " << endl;
 	}
 
 	
@@ -561,11 +564,11 @@ void Contactnode::updataAll() {
 		cout << "\t Enter Vaild Phone number  " << endl;
 		cin >> num;
 	}
-	while (search(1, num) != true)
+	if (search(1, num) != true)
 	{
-		cout << "\t Enter Vaild Phone number for search " << endl;
-		cin >> num;
+		cout << "\t Cannot found  " << endl;
 	}
+
 
 
 	string NewNum = num;
@@ -614,18 +617,22 @@ void Contactnode::deleteContact(string num){
 		cout << "\t Enter Vaild Phone number  " << endl;
 		cin >> num;
 	}
-	if (ContactTop != NULL) {
-		while (ContactTop != NULL) {
-			if ((ContactTop->next)->phone == num) {
-				ContactTop->next = (ContactTop->next)->next;
-				cout << "Deleted" << endl;
-				break;
-				
+	if (search(1,num) == true)
+	{
+		
+		if (ContactTop != NULL) {
+			while (ContactTop != NULL) {
+				if ((ContactTop->next)->phone == num) {
+					ContactTop->next = (ContactTop->next)->next;
+					cout << "Deleted" << endl;
+					break;
+
+				}
+				ContactTop = ContactTop->next;
 			}
-			ContactTop = ContactTop->next;
-		}
+		
 	}
-	
+	}
 	ContactTop = ContactTopBack;
 
 	sortAndSavaFile();
